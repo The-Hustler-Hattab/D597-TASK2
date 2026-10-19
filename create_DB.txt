@@ -1,0 +1,13 @@
+
+db = db.getSiblingDB("D597_Task_2");
+
+// Create the collections
+db.createCollection("cosmetics");
+db.createCollection("grocery_transactions");
+
+// Verify the database name
+db.getName();
+db.adminCommand({ listDatabases: 1 });
+
+// Verify the collections
+db.getCollectionNames();
