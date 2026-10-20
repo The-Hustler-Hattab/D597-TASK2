@@ -1,0 +1,21 @@
+var q1 = db.cosmetics.find(
+  {
+    Price: { $lte: 50 },
+    Rank: { $gte: 4.5 }
+  },
+  {
+    _id: 0,
+    Name: 1,
+    Brand: 1,
+    Price: 1,
+    Rank: 1
+  }
+).sort({ Price: 1 }).explain("executionStats");
+
+printjson({
+  executionTimeMillis: q1.executionStats.executionTimeMillis,
+  totalDocsExamined: q1.executionStats.totalDocsExamined,
+  totalKeysExamined: q1.executionStats.totalKeysExamined,
+  nReturned: q1.executionStats.nReturned,
+  winningPlan: q1.queryPlanner.winningPlan
+});

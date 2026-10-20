@@ -1,0 +1,16 @@
+
+db.cosmetics.aggregate([
+  {
+    $group: {
+      _id: "$Brand",
+      averageRating: { $avg: "$Rank" },
+      productCount: { $sum: 1 }
+    }
+  },
+  {
+    $sort: { averageRating: -1 }
+  },
+  {
+    $limit: 10
+  }
+]);

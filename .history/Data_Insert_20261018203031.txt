@@ -1,0 +1,19 @@
+
+
+// import data
+mongoimport --db "D597_Task_2" --collection "cosmetics" --file "C:\Users\student\Desktop\github\D597-TASK2\data\Task2Scenario2 Dataset 1_cosmetics.json" --jsonArray
+
+mongoimport --db "D597_Task_2" --collection "grocery_transactions" --file "C:\Users\student\Desktop\github\D597-TASK2\data\Task2Scenario2 Dataset 2_Groceries_dataset.json" --jsonArray
+
+
+// verify data import
+
+db = db.getSiblingDB("D597_Task_2");
+
+db.cosmetics.countDocuments({});
+db.grocery_transactions.countDocuments({});
+
+
+db.cosmetics.find().limit(1);
+db.grocery_transactions.find().limit(3);
+

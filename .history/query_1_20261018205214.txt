@@ -1,0 +1,16 @@
+
+db = db.getSiblingDB("D597_Task_2");
+
+db.cosmetics.find(
+  {
+    Price: { $lte: 50 },
+    Rank: { $gte: 4.5 }
+  },
+  {
+    _id: 0,
+    Name: 1,
+    Brand: 1,
+    Price: 1,
+    Rank: 1
+  }
+).sort({ Price: 1 });

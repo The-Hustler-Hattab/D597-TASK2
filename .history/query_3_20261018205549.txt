@@ -1,0 +1,14 @@
+db.grocery_transactions.aggregate([
+  {
+    $group: {
+      _id: "$itemDescription",
+      purchaseCount: { $sum: 1 }
+    }
+  },
+  {
+    $sort: { purchaseCount: -1 }
+  },
+  {
+    $limit: 10
+  }
+]);
