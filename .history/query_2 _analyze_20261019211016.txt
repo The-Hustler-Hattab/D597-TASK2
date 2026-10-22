@@ -1,0 +1,33 @@
+var q2 = db.cosmetics.explain("executionStats").aggregate([
+  {
+    $group: {
+      _id: "$Brand",
+      averageRating: { $avg: "$Rank" },
+      productCount: { $sum: 1 }
+    }
+  },
+  { $sort: { averageRating: -1 } },
+  { $limit: 10 }
+], { hint: "idx_brand_rank" });
+var stats = q2.executionStats;
+var planner = q2.queryPlanner;
+
+if (q2.stages) {
+  for (var i = 0; i < q2.stages.length; i++) {
+    if (q2.stages[i].$cursor) {
+      stats = q2.stages[i].$cursor.executionStats;
+      planner = q2.stages[i].$cursor.queryPlanner;
+      break;
+    }
+  }
+}
+
+printjson({
+  executionTimeMillis: stats.executionTimeMillis,
+  totalDocsExamined: stats.totalDocsExamined,
+  totalKeysExamined: stats.totalKeysExamined,
+  nReturned: q2.stages
+    ? q2.stages[q2.stages.length - 1].nReturned
+    : null,
+  winningPlan: planner ? planner.winningPlan : null
+});

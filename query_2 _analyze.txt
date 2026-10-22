@@ -1,3 +1,28 @@
+// before index
+var q2 = db.cosmetics.explain("executionStats").aggregate([
+  {
+    $group: {
+      _id: "$Brand",
+      averageRating: { $avg: "$Rank" },
+      productCount: { $sum: 1 }
+    }
+  },
+  { $sort: { averageRating: -1 } },
+  { $limit: 10 }
+]);
+
+// after index
+//var q2 = db.cosmetics.explain("executionStats").aggregate([
+//  {
+//    $group: {
+//      _id: "$Brand",
+//      averageRating: { $avg: "$Rank" },
+//      productCount: { $sum: 1 }
+//    }
+//  },
+//  { $sort: { averageRating: -1 } },
+//  { $limit: 10 }
+//], { hint: "idx_brand_rank" });
 
 var stats = q2.executionStats;
 var planner = q2.queryPlanner;

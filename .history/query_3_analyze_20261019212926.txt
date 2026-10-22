@@ -1,0 +1,46 @@
+
+var q3 = db.grocery_transactions.explain("executionStats").aggregate([
+  {
+    $group: {
+      _id: "$itemDescription",
+      purchaseCount: { $sum: 1 }
+    }
+  },
+  { $sort: { purchaseCount: -1 } },
+  { $limit: 10 }
+]);
+
+// after the index
+var q3 = db.grocery_transactions.explain("executionStats").aggregate([
+  {
+    $group: {
+      _id: "$itemDescription",
+      purchaseCount: { $sum: 1 }
+    }
+  },
+  { $sort: { purchaseCount: -1 } },
+  { $limit: 10 }
+], { hint: "idx_item_description" });
+
+var stats = q3.executionStats;
+var planner = q3.queryPlanner;
+
+if (q3.stages) {
+  for (var i = 0; i < q3.stages.length; i++) {
+    if (q3.stages[i].$cursor) {
+      stats = q3.stages[i].$cursor.executionStats;
+      planner = q3.stages[i].$cursor.queryPlanner;
+      break;
+    }
+  }
+}
+
+printjson({
+  executionTimeMillis: stats.executionTimeMillis,
+  totalDocsExamined: stats.totalDocsExamined,
+  totalKeysExamined: stats.totalKeysExamined,
+  nReturned: q3.stages
+    ? q3.stages[q3.stages.length - 1].nReturned
+    : null,
+  winningPlan: planner ? planner.winningPlan : null
+});

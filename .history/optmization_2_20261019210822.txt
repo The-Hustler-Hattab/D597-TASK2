@@ -1,0 +1,4 @@
+db.cosmetics.createIndex(
+  { Brand: 1, Rank: 1 },
+  { name: "idx_brand_rank" }
+);

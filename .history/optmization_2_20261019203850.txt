@@ -1,0 +1,7 @@
+
+db = db.getSiblingDB("D597_Task_2");
+
+db.cosmetics.createIndex(
+  { Price: 1, Rank: -1 },
+  { name: "idx_price_rank" }
+);

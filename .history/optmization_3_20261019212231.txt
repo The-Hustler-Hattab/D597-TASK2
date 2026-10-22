@@ -1,0 +1,5 @@
+
+db.grocery_transactions.createIndex(
+  { itemDescription: 1 },
+  { name: "idx_item_description" }
+);
